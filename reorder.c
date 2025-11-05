@@ -42,12 +42,16 @@ static struct listnode* merge(struct listnode* node1, struct listnode* node2) {
     struct listnode head = {0};
     struct listnode* itr = &head;
     while (node1 || node2) {
-        itr->next = node1;
-        node1 = node1->next;
-        itr = itr->next;
-        itr->next = node2;
-        itr = itr->next;
-        node2 = node2->next;
+        if(node1){
+            itr->next = node1;
+            node1 = node1->next;
+            itr = itr->next;
+        }
+        if(node2){
+            itr->next = node2;
+            node2 = node2->next;
+            itr = itr->next;
+        }
     }
     if (node1) {
         itr->next = node1;
@@ -73,7 +77,7 @@ static void free_node(struct listnode** node) {
 
 void free_list(struct listnode* node) {
     while (node) {
+        node = node->next;
         free_node(&node);
-	node = node->next;
     }
 }
